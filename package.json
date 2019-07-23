@@ -1,11 +1,11 @@
 {
-  "name": "react-datetime",
-  "version": "2.16.3",
+  "name": "react-date-and-time",
+  "version": "1.1.0",
   "description": "A lightweight but complete datetime picker React.js component",
   "homepage": "https://github.com/YouCanBookMe/react-datetime",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YouCanBookMe/react-datetime"
+    "url": "git+https://github.com/YouCanBookMe/react-datetime.git"
   },
   "main": "./DateTime.js",
   "typings": "./DateTime.d.ts",
@@ -17,17 +17,17 @@
     "dist"
   ],
   "scripts": {
-    "build:mac": "./node_modules/.bin/gulp",
-    "build:win": "./node_modules/.bin/gulp.cmd",
-    "dev": "./node_modules/.bin/webpack-dev-server --config example/webpack.config.js --devtool eval --progress --colors --hot --content-base example",
-    "lint": "./node_modules/.bin/eslint src/ DateTime.js test/ && echo 'Linting OK! 💪'",
+    "build:mac": "gulp",
+    "build:win": "gulp.cmd",
+    "dev": "webpack-dev-server --config example/webpack.config.js --devtool eval --progress --colors --hot --content-base example",
+    "lint": "eslint src/ DateTime.js test/ && echo 'Linting OK! 💪'",
     "notify-pre-commit-hook": "echo '### Starting pre-commit hook 🦄'",
-    "test": "./node_modules/.bin/jest",
-    "test:typings": "./node_modules/.bin/tsc -p ./typings",
-    "test:snapshot": "./node_modules/.bin/jest snapshot",
-    "test:snapshot:update": "./node_modules/.bin/jest snapshot --updateSnapshot",
+    "test": "jest",
+    "test:typings": "tsc -p ./typings",
+    "test:snapshot": "jest snapshot",
+    "test:snapshot:update": "jest snapshot --updateSnapshot",
     "test:all": "echo 'Running tests...' && npm run test:typings && npm run test && echo 'All tests passed! 🤘'",
-    "test:watch": "./node_modules/.bin/jest --watch"
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "react",
@@ -69,9 +69,9 @@
     "moment": ">=2.16.0",
     "moment-timezone": "^0.5.13",
     "pre-commit": "^1.1.3",
-    "react": "^15.5.0",
+    "react": "^16.8.2",
     "react-addons-test-utils": ">=0.13",
-    "react-dom": "^15.5.0",
+    "react-dom": "^16.8.6",
     "react-test-renderer": "^15.5.0",
     "through2": "^2.0.3",
     "typescript": "^2.0.10",
@@ -89,5 +89,12 @@
     "notify-pre-commit-hook",
     "lint",
     "test:all"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/YouCanBookMe/react-datetime/issues"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
+  }
 }

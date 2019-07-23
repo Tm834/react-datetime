@@ -44,7 +44,10 @@ var Datetime = createClass({
 		strictParsing: TYPES.bool,
 		closeOnSelect: TYPES.bool,
 		closeOnTab: TYPES.bool,
-		direction: TYPES.oneOf(['down', 'up'])
+		direction: TYPES.oneOf(['down', 'up']),
+		// portal functionality
+		portalTarget: TYPES.oneOfType([TYPES.string, TYPES.object]),
+		styles: PropTypes.object
 	},
 
 	getInitialState: function() {
@@ -510,19 +513,38 @@ var Datetime = createClass({
 
 		if ( this.props.open || (this.props.open === undefined && this.state.open ) )
 			className += ' rdtOpen';
+		if (!this.props.portalTarget) {
+			return React.createElement( ClickableWrapper, {className: className, onClickOut: this.handleClickOutside}, children.concat(
+				// React.createElement(<Portal />, {id: this.props.portalTarget, styles: this.props.styles}),
+				React.createElement( 'div',
+					{ key: 'dt', className: 'rdtPicker' },
+					React.createElement( CalendarContainer, { view: this.state.currentView, viewProps: this.getComponentProps() })
+				)
+			));
+		} else {
+			var target = document.getElementById(this.props.portalTarget).getBoundingClientRect();
+			var styles = {
+				position: 'absolute',
+				left: target.x
+			};
 
-		return React.createElement( ClickableWrapper, {className: className, onClickOut: this.handleClickOutside}, children.concat(
-			React.createElement( 'div',
-				{ key: 'dt', className: 'rdtPicker' },
-				React.createElement( CalendarContainer, { view: this.state.currentView, viewProps: this.getComponentProps() })
-			)
-		));
+			Object.assign(styles, this.props.styles.portal);
+
+			return ReactDOM.createPortal(
+				React.createElement( ClickableWrapper, {className: className, onClickOut: this.handleClickOutside, style:  styles }, children.concat(
+				React.createElement( 'div',
+					{ key: 'dt', className: 'rdtPicker', style: this.props.styles.picker},
+					React.createElement( CalendarContainer, { view: this.state.currentView, viewProps: this.getComponentProps() })
+				)
+			)), document.body);
+		}
+
 	}
 });
 
 var ClickableWrapper = onClickOutside( createClass({
 	render: function() {
-		return React.createElement( 'div', { className: this.props.className }, this.props.children );
+		return React.createElement( 'div', { className: this.props.className, style: this.props.style }, this.props.children );
 	},
 	handleClickOutside: function( e ) {
 		this.props.onClickOut( e );
@@ -547,7 +569,9 @@ Datetime.defaultProps = {
 	closeOnSelect: false,
 	closeOnTab: true,
 	utc: false,
-	direction: 'down'
+	direction: 'down',
+	portalTarget: null,
+	styles: {}
 };
 
 // Make moment accessible through the Datetime class
